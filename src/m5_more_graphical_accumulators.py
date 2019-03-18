@@ -29,7 +29,7 @@ def main():
     """ Calls the   TEST   functions in this module. """
     run_test_draw_squares_from_circle()
     run_test_draw_circles_from_rectangle()
-    run_test_draw_lines_from_rectangles()
+    # run_test_draw_lines_from_rectangles()
 
 
 def run_test_draw_squares_from_circle():
@@ -73,11 +73,13 @@ def run_test_draw_squares_from_circle():
 
 
 def draw_squares_from_circle(n, circle, window):
+    center = circle.center
     for k in range(n):
-        center=circle.center
-        square=rg.Square(rg.Point(circle.center+k*circle.radius,2*circle.radius))
+        square = rg.Square(center, 2 * circle.radius)
+        circle.attach_to(window)
         square.attach_to(window)
-        window.render()
+        center = rg.Point(center.x + circle.radius, center.y + circle.radius)
+    window.render()
     """
     What comes in:  Three arguments:
       -- A positive integer n.
@@ -103,7 +105,7 @@ def draw_squares_from_circle(n, circle, window):
       :type window: rg.RoseWindow
     """
     # -------------------------------------------------------------------------
-    # TODO: 2. Implement and test this function.
+    # DONE: 2. Implement and test this function.
     #          Tests have been written for you (above).
     #
     # CONSIDER using the ACCUMULATOR IN GRAPHICS pattern,
@@ -119,6 +121,32 @@ def draw_squares_from_circle(n, circle, window):
 
 
 def run_test_draw_circles_from_rectangle():
+    window4 = rg.RoseWindow(2000, 2000)
+
+    # Test 1:
+    rectangle = rg.Rectangle(rg.Point(800, 200), rg.Point(700, 150))
+    rectangle.fill_color = 'green'
+    rectangle.outline_color = 'red'
+    draw_circles_from_rectangle(3, 2, rectangle, window4)
+    window4.continue_on_mouse_click()
+
+    # Test 2:
+    rectangle = rg.Rectangle(rg.Point(600, 400), rg.Point(400, 550))
+    rectangle.fill_color = 'black'
+    rectangle.outline_color = 'orange'
+    draw_circles_from_rectangle(2, 2, rectangle, window4)
+    window4.close_on_mouse_click()
+    window5 = rg.RoseWindow(2000, 2000)
+
+
+
+    # Test 3:
+    rectangle = rg.Rectangle(rg.Point(500, 700), rg.Point(400, 500))
+    rectangle.fill_color = 'green'
+    rectangle.outline_color = 'black'
+    draw_circles_from_rectangle(4, 4, rectangle, window5)
+    window5.close_on_mouse_click()
+
     """ Tests the   draw_circles_from_rectangle  function. """
     print()
     print('--------------------------------------------------')
@@ -127,7 +155,7 @@ def run_test_draw_circles_from_rectangle():
     print('--------------------------------------------------')
 
     # -------------------------------------------------------------------------
-    # TODO: 3. Implement this TEST function.
+    # DONE: 3. Implement this TEST function.
     #   It TESTS the  draw_circles_from_rectangle  function
     #   defined below.  Include at least **   3   ** tests, of which
     #      ***  at least TWO tests are on ONE window and
@@ -142,6 +170,24 @@ def run_test_draw_circles_from_rectangle():
 
 
 def draw_circles_from_rectangle(m, n, rectangle, window):
+    rectangle.attach_to(window)
+    for k in range(m):
+        center = rg.Point(rectangle.get_lower_left_corner().x - (2*(k + 1) * ((rectangle.get_lower_left_corner().y - rectangle.get_upper_right_corner().y) / 2)),
+                          rectangle.get_lower_left_corner().y - (rectangle.get_lower_left_corner().y - rectangle.get_upper_right_corner().y) / 2)
+        circle = rg.Circle(center, (rectangle.get_lower_left_corner().y - rectangle.get_upper_right_corner().y) / 2)
+        circle.fill_color = rectangle.fill_color
+        circle.attach_to(window)
+
+
+    center1=rg.Point(rectangle.get_center().x,rectangle.get_upper_left_corner().y-(rectangle.get_width())/2)
+    for l in range(n):
+
+        circle=rg.Circle(center1,(rectangle.get_width())/2)
+
+        circle.attach_to(window)
+        circle.outline_color = rectangle.outline_color
+        center1=rg.Point(center1.x,center1.y-rectangle.get_width())
+    window.render()
     """
     What comes in:  Four arguments:
       -- Positive integers m and n.
